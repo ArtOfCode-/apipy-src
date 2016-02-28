@@ -74,7 +74,10 @@ class APIRequester:
         url = "https://api.stackexchange.com/2.2" + route + "?"
 
         # Most SE API requests are GET format, but a few are POST. Better let the next dev decide which they need.
-        request_type = data["request_type"] if "request_type" in data else "get"
+        request_type = "get"
+        if "request_type" in data:
+            request_type = data["request_type"]
+            del data["request_type"]
 
         # That said, I don't believe the API accepts PUT or DELETE, etc. So we'll limit it to that.
         if request_type is not "get" and request_type is not "post":
