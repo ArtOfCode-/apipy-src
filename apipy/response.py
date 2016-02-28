@@ -1,3 +1,5 @@
+import json
+
 class APIResponse:
     """
     Contains data from and helper methods for managing responses to requests to the Stack API.
@@ -57,3 +59,17 @@ class APIResponse:
         :return: An integer, or None if there is no backoff.
         """
         return self.__json["backoff"] if "backoff" in self.__json else None
+
+    def json(self):
+        """
+        Returns the raw response as a Python dictionary - essentially JSON format.
+        :return: A dictionary containing the raw response.
+        """
+        return self.__json
+
+    def text(self):
+        """
+        Returns the raw text of the response without any fancy formatting.
+        :return: A string, containing the response text.
+        """
+        return json.dumps(self.__json)
