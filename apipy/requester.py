@@ -84,17 +84,21 @@ class APIRequester:
             data["key"] = self.get_request_token("request_key")
 
         if data is not None:        # 'cos if it is, we can just send the request already
+            del_keys = []
             for key, value in data.items():
                 if "{" + key + "}" in url:      # replace /route/{param}/action  -> /route/23;45;76/action o.e.
                     if isinstance(value, list):
                         string_value = ";".join(value)
-                        url = url.replace("{" + url + "}", string_value)
+                        url = url.replace("{" + key + "}", string_value)
                     else:
-                        url = url.replace("{" + url + "}", value)  # not liking this repeated line, must be a better way
-                    del data[key]
+                        url = url.replace("{" + key + "}", value)  # not liking this repeated line, must be a better way
+                    del_keys.append(key)
                 else:
                     if request_type == "get":
                         url += str(key) + "=" + str(value) + "&"
+
+            for key in del_keys:
+                del data[key]
 
         if request_type == "get":
             response = requests.get(url)
